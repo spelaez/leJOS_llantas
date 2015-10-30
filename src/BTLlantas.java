@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import lejos.nxt.LCD;
+import lejos.nxt.Motor;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 
@@ -27,21 +28,18 @@ public class BTLlantas {
 			LCD.refresh();	
 
 			DataInputStream dis = btc.openDataInputStream();
-			
-			for(int i=0;i<100;i++) {
+			for(int i=0;i<2;i++){
 				int n = dis.readInt();
-				LCD.drawInt(n, 5, 5);
-				
+				if(n == 1){
+					Motor.A.forward();
+					Motor.B.forward();
+				}
+				if(n == 0){
+					Motor.A.stop();
+					Motor.B.stop();
+				}
 			}
-			Thread.sleep(2000);
-			dis.close();
-			Thread.sleep(2000); // wait for data to drain
-			LCD.clear();
-			LCD.drawString(closing,0,0);
-			LCD.refresh();
-			btc.close();
-			LCD.clear();
-			
+			 btc.close();
 		   
 		}
 		
