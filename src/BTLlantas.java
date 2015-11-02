@@ -126,7 +126,7 @@ public class BTLlantas {
 		actualizarGRotacion(45);
 	}
 	public static void girarIzquierda() throws InterruptedException{
-		Motor.B.rotateTo(-45);
+		Motor.A.rotateTo(-45);
 		actualizarGRotacion(-45);
 	}
 	public static void chutar() throws InterruptedException{
