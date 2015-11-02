@@ -9,39 +9,140 @@ import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 
 public class BTLlantas {
-
-	public static void main(String [] args)  throws Exception 
+	static int xPosition;
+	static int yPosition;
+	static int gRotacion = 0;
+	
+	public static void main(String [] args)  throws IOException, InterruptedException
 	{
-		String connected = "Connected";
-        String waiting = "Waiting...";
-        String closing = "Closing...";
+		String connected = "Conexion exitosa!!!";
+        String waiting = "Esperando conexion...";
+        String closing = "Cerrando conexion...";
         
+        Motor.A.resetTachoCount();
+        Motor.B.resetTachoCount();
+        Motor.C.resetTachoCount();
 		while (true)
 		{
-			LCD.drawString(waiting,0,0);
+			LCD.drawString(waiting,1,0);
 			LCD.refresh();
 
 	        BTConnection btc = Bluetooth.waitForConnection();
 	        
 			LCD.clear();
-			LCD.drawString(connected,0,0);
+			LCD.drawString(connected,1,0);
 			LCD.refresh();	
 
-			DataInputStream dis = btc.openDataInputStream();
-			for(int i=0;i<2;i++){
-				int n = dis.readInt();
-				if(n == 1){
-					Motor.A.forward();
-					Motor.B.forward();
+			DataInputStream dataIn = btc.openDataInputStream();
+			DataOutputStream dataOut = btc.openDataOutputStream();
+			int option = -1;
+			while(option != 0){
+				option = dataIn.readInt();
+				if(option == 1){
+					trotar();
 				}
-				if(n == 0){
-					Motor.A.stop();
-					Motor.B.stop();
+				else if(option == 2){
+					correr();
 				}
+				else if(option == 3){
+					retroceder();
+				}
+				else if(option == 4){
+					girar();
+				}
+				else if(option == 5){
+					chutar();
+				}
+				else if(option == 6){
+					patear();
+				}
+				Motor.A.stop();
+				Motor.B.stop();
+				Motor.C.stop();
+				dataOut.write(xPosition);
+				dataOut.write(yPosition);
+				dataOut.flush();
+				}
+			
+			LCD.drawString(closing, 1, 0);
+			dataIn.close();
+			dataOut.close();
+			Thread.sleep(1000);//damos tiempo para que evacue los datos
 			}
-			 btc.close();
+
 		   
 		}
 		
+	public static void trotar() throws InterruptedException{
+		Motor.A.setSpeed(360);
+		Motor.B.setSpeed(360);
+		Motor.A.forward();
+		Motor.B.forward();
+		Thread.sleep(2000);
+		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(2,0);
+		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(1,1);
+		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,2);
+		else if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(-1,1);
+		else if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(-2,0);
+		else if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(-1,-1);
+		else if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,-2);
+		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(1,-1);
+	}
+	public static void correr() throws InterruptedException{
+		Motor.A.setSpeed(720);
+		Motor.B.setSpeed(720);
+		Motor.A.forward();
+		Motor.B.forward();
+		Thread.sleep(2000);
+		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(4,0);
+		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(2,2);
+		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,4);
+		else if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(-2,2);
+		else if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(-4,0);
+		else if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(-2,-2);
+		else if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,-4);
+		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(2,-2);
+	}
+	public static void retroceder() throws InterruptedException{
+		Motor.A.setSpeed(360);
+		Motor.B.setSpeed(360);
+		Motor.A.backward();
+		Motor.B.backward();
+		Thread.sleep(2000);
+		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(-2,0);
+		if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(-1,-1);
+		if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,-2);
+		if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(1,-1);
+		if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(2,0);
+		if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(1,1);
+		if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,2);
+		if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(-1,1);
+	}
+	public static void girar() throws InterruptedException{
+		//pendiente de análisis
+		
+	}
+	public static void chutar() throws InterruptedException{
+		Motor.C.setSpeed(360);
+		Motor.C.rotateTo(-10); //para prueba
+	}
+	public static void patear() throws InterruptedException{
+		Motor.C.setSpeed(720);
+		Motor.C.rotateTo(-10);//para prueba
+	}
+	
+	public static void actualizarPosicion(int x, int y){
+		xPosition += x;
+		yPosition += y;
+	}
+	
+	public static void actualizarGRotacion(int g){
+		gRotacion += g;
+		if(gRotacion > 360){
+			gRotacion = gRotacion -360;
+		}
+		else if (gRotacion < -360){
+			gRotacion = gRotacion + 360;
+		}
 	}
 }
