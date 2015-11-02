@@ -48,12 +48,15 @@ public class BTLlantas {
 					retroceder();
 				}
 				else if(option == 4){
-					girar();
+					girarDerecha();
 				}
 				else if(option == 5){
-					chutar();
+					girarIzquierda();
 				}
 				else if(option == 6){
+					chutar();
+				}
+				else if(option == 7){
 					patear();
 				}
 				Motor.A.stop();
@@ -118,9 +121,13 @@ public class BTLlantas {
 		if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,2);
 		if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(-1,1);
 	}
-	public static void girar() throws InterruptedException{
-		//pendiente de análisis
-		
+	public static void girarDerecha() throws InterruptedException{
+		Motor.B.rotateTo(45);
+		actualizarGRotacion(45);
+	}
+	public static void girarIzquierda() throws InterruptedException{
+		Motor.B.rotateTo(-45);
+		actualizarGRotacion(-45);
 	}
 	public static void chutar() throws InterruptedException{
 		Motor.C.setSpeed(360);
