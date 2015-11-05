@@ -15,9 +15,9 @@ public class BTLlantas {
 	
 	public static void main(String [] args)  throws IOException, InterruptedException
 	{
-		String connected = "Conexion exitosa!!!";
-        String waiting = "Esperando conexion...";
-        String closing = "Cerrando conexion...";
+		String connected = "Conexion\n exitosa!!!";
+        String waiting = "Esperando\n conexion...";
+        String closing = "Cerrando\n conexion...";
         
         Motor.A.resetTachoCount();
         Motor.B.resetTachoCount();
@@ -34,7 +34,7 @@ public class BTLlantas {
 			LCD.refresh();	
 
 			DataInputStream dataIn = btc.openDataInputStream();
-			DataOutputStream dataOut = btc.openDataOutputStream();
+			//DataOutputStream dataOut = btc.openDataOutputStream();
 			int option = -1;
 			while(option != 0){
 				option = dataIn.readInt();
@@ -59,17 +59,20 @@ public class BTLlantas {
 				else if(option == 7){
 					patear();
 				}
+				else{
+					break;
+				}
 				Motor.A.stop();
 				Motor.B.stop();
 				Motor.C.stop();
-				dataOut.write(xPosition);
-				dataOut.write(yPosition);
-				dataOut.flush();
+				//dataOut.write(xPosition);
+				//dataOut.write(yPosition);
+				//dataOut.flush();
 				}
 			
 			LCD.drawString(closing, 1, 0);
 			dataIn.close();
-			dataOut.close();
+			//dataOut.close();
 			Thread.sleep(1000);//damos tiempo para que evacue los datos
 			}
 
@@ -122,20 +125,24 @@ public class BTLlantas {
 		if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(-1,1);
 	}
 	public static void girarDerecha() throws InterruptedException{
-		Motor.B.rotateTo(45);
-		actualizarGRotacion(45);
+		Motor.B.rotate(720);
 	}
 	public static void girarIzquierda() throws InterruptedException{
-		Motor.A.rotateTo(-45);
+		//Motor.B.setSpeed(0.5F);
+		//Motor.A.setSpeed(1);
+		//Motor.B.rotate(10);
+		Motor.A.rotate(720);
 		actualizarGRotacion(-45);
 	}
 	public static void chutar() throws InterruptedException{
-		Motor.C.setSpeed(360);
-		Motor.C.rotateTo(-10); //para prueba
+		Motor.C.setSpeed(200);
+		Motor.C.rotateTo(-45); //para prueba
+		Motor.C.rotateTo(-8);
 	}
 	public static void patear() throws InterruptedException{
-		Motor.C.setSpeed(720);
-		Motor.C.rotateTo(-10);//para prueba
+		Motor.C.setSpeed(400);
+		Motor.C.rotateTo(-100);//para prueba
+		Motor.C.rotateTo(-8);
 	}
 	
 	public static void actualizarPosicion(int x, int y){
