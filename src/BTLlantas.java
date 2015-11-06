@@ -12,7 +12,7 @@ public class BTLlantas {
 	static int xPosition;
 	static int yPosition;
 	static int gRotacion = 0;
-	static DifferentialPilot pilot = new DifferentialPilot(2.36, 4.5, Motor.B, Motor.A);
+	static DifferentialPilot pilot = new DifferentialPilot(60, 115, Motor.B, Motor.A);
 	
 	public static void main(String [] args)  throws IOException, InterruptedException
 	{	
@@ -36,7 +36,7 @@ public class BTLlantas {
 			LCD.refresh();	
 
 			DataInputStream dataIn = btc.openDataInputStream();
-			//DataOutputStream dataOut = btc.openDataOutputStream();
+			DataOutputStream dataOut = btc.openDataOutputStream();
 			int option = -1;
 			while(option != 0){
 				option = dataIn.readInt();
@@ -64,94 +64,76 @@ public class BTLlantas {
 				else{
 					break;
 				}
-				Motor.A.stop();
-				Motor.B.stop();
-				Motor.C.stop();
-				//dataOut.write(xPosition);
-				//dataOut.write(yPosition);
-				//dataOut.flush();
+				dataOut.writeInt(xPosition);
+				dataOut.writeInt(yPosition);
+				dataOut.flush();
 				}
 			
 			LCD.drawString(closing, 1, 0);
 			dataIn.close();
-			//dataOut.close();
-			Thread.sleep(1000);//damos tiempo para que evacue los datos
+			dataOut.close();
+			btc.close();
+			Thread.sleep(500);//damos tiempo para que evacue los datos
 			}
 
 		   
 		}
 		
 	public static void trotar() throws InterruptedException{
-		pilot.travel(6);
-		//Motor.A.setSpeed(360);
-		//Motor.B.setSpeed(360);
-		//Motor.A.forward();
-		//Motor.B.forward();
-		//Thread.sleep(2000);
-		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(2,0);
-		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(1,1);
-		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,2);
-		else if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(-1,1);
-		else if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(-2,0);
-		else if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(-1,-1);
-		else if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,-2);
-		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(1,-1);
+		pilot.setTravelSpeed(150);
+		pilot.travel(200);
+		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(200,0);
+		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(100,100);
+		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,200);
+		else if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(-100,100);
+		else if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(-200,0);
+		else if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(-100,-100);
+		else if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,-200);
+		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(100,-100);
 	}
 	public static void correr() throws InterruptedException{
-		pilot.setTravelSpeed(6);
-		pilot.travel(6);
-		//Motor.A.setSpeed(720);
-		//Motor.B.setSpeed(720);
-		//Motor.A.forward();
-		//Motor.B.forward();
-		//Thread.sleep(2000);
-		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(4,0);
-		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(2,2);
-		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,4);
-		else if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(-2,2);
-		else if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(-4,0);
-		else if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(-2,-2);
-		else if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,-4);
-		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(2,-2);
+		pilot.setTravelSpeed(300);
+		pilot.travel(200);
+		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(200,0);
+		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(100,100);
+		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,200);
+		else if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(-100,100);
+		else if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(-200,0);
+		else if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(-100,-100);
+		else if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,-200);
+		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(100,-100);
 	}
 	public static void retroceder() throws InterruptedException{
-		pilot.travel(-3);
-		//Motor.A.setSpeed(360);
-		//Motor.B.setSpeed(360);
-		//Motor.A.backward();
-		//Motor.B.backward();
-		//Thread.sleep(2000);
-		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(-2,0);
-		if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(-1,-1);
-		if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,-2);
-		if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(1,-1);
-		if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(2,0);
-		if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(1,1);
-		if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,2);
-		if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(-1,1);
+		pilot.setTravelSpeed(150);
+		pilot.travel(-150);
+		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(-150,0);
+		if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(-75,-75);
+		if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,-150);
+		if(gRotacion == 135 || gRotacion == -225) actualizarPosicion(75,-75);
+		if(gRotacion == 180 || gRotacion == -180) actualizarPosicion(150,0);
+		if(gRotacion == 225 || gRotacion == -135) actualizarPosicion(75,75);
+		if(gRotacion == 270 || gRotacion == -90) actualizarPosicion(0,150);
+		if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(-75,75);
 	}
 	public static void girarDerecha() throws InterruptedException{
-		pilot.rotate(-45);
-		//Motor.B.rotate(720);
+		pilot.setTravelSpeed(10);
+		pilot.rotate(-170);
 		actualizarGRotacion(45);
 	}
 	public static void girarIzquierda() throws InterruptedException{
-		pilot.rotate(45);
-		//Motor.B.setSpeed(0.5F);
-		//Motor.A.setSpeed(1);
-		//Motor.B.rotate(10);
-		//Motor.A.rotate(720);
+		pilot.setTravelSpeed(10);
+		pilot.rotate(170);
 		actualizarGRotacion(-45);
 	}
 	public static void chutar() throws InterruptedException{
 		Motor.C.setSpeed(200);
-		Motor.C.rotateTo(-45); //para prueba
-		Motor.C.rotateTo(-8);
+		Motor.C.rotateTo(-45);
+		Motor.C.rotateTo(-10);
 	}
 	public static void patear() throws InterruptedException{
 		Motor.C.setSpeed(400);
-		Motor.C.rotateTo(-100);//para prueba
-		Motor.C.rotateTo(-8);
+		Motor.C.rotateTo(-100);
+		Motor.C.rotateTo(-10);
 	}
 	
 	public static void actualizarPosicion(int x, int y){
