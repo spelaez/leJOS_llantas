@@ -21,8 +21,7 @@ public class BTLlantas {
         String waiting = "Esperando\n conexion...";
         String closing = "Cerrando\n conexion...";
         
-        Motor.A.resetTachoCount();
-        Motor.B.resetTachoCount();
+        pilot.reset();
         Motor.C.resetTachoCount();
 		while (true)
 		{
