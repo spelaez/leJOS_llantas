@@ -2,19 +2,21 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+import lejos.robotics.navigation.DifferentialPilot;
 
 public class BTLlantas {
 	static int xPosition;
 	static int yPosition;
 	static int gRotacion = 0;
+	static DifferentialPilot pilot = new DifferentialPilot(2.36, 4.5, Motor.B, Motor.A);
 	
 	public static void main(String [] args)  throws IOException, InterruptedException
-	{
+	{	
+		pilot.setTravelSpeed(3);
 		String connected = "Conexion\n exitosa!!!";
         String waiting = "Esperando\n conexion...";
         String closing = "Cerrando\n conexion...";
@@ -80,11 +82,12 @@ public class BTLlantas {
 		}
 		
 	public static void trotar() throws InterruptedException{
-		Motor.A.setSpeed(360);
-		Motor.B.setSpeed(360);
-		Motor.A.forward();
-		Motor.B.forward();
-		Thread.sleep(2000);
+		pilot.travel(6);
+		//Motor.A.setSpeed(360);
+		//Motor.B.setSpeed(360);
+		//Motor.A.forward();
+		//Motor.B.forward();
+		//Thread.sleep(2000);
 		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(2,0);
 		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(1,1);
 		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,2);
@@ -95,11 +98,13 @@ public class BTLlantas {
 		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(1,-1);
 	}
 	public static void correr() throws InterruptedException{
-		Motor.A.setSpeed(720);
-		Motor.B.setSpeed(720);
-		Motor.A.forward();
-		Motor.B.forward();
-		Thread.sleep(2000);
+		pilot.setTravelSpeed(6);
+		pilot.travel(6);
+		//Motor.A.setSpeed(720);
+		//Motor.B.setSpeed(720);
+		//Motor.A.forward();
+		//Motor.B.forward();
+		//Thread.sleep(2000);
 		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(4,0);
 		else if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(2,2);
 		else if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,4);
@@ -110,11 +115,12 @@ public class BTLlantas {
 		else if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(2,-2);
 	}
 	public static void retroceder() throws InterruptedException{
-		Motor.A.setSpeed(360);
-		Motor.B.setSpeed(360);
-		Motor.A.backward();
-		Motor.B.backward();
-		Thread.sleep(2000);
+		pilot.travel(-3);
+		//Motor.A.setSpeed(360);
+		//Motor.B.setSpeed(360);
+		//Motor.A.backward();
+		//Motor.B.backward();
+		//Thread.sleep(2000);
 		if(gRotacion == 0 || gRotacion == 360 || gRotacion == -360) actualizarPosicion(-2,0);
 		if(gRotacion == 45 || gRotacion == -315 ) actualizarPosicion(-1,-1);
 		if(gRotacion == 90 || gRotacion == -270) actualizarPosicion(0,-2);
@@ -125,13 +131,16 @@ public class BTLlantas {
 		if(gRotacion == 315 || gRotacion == -45) actualizarPosicion(-1,1);
 	}
 	public static void girarDerecha() throws InterruptedException{
-		Motor.B.rotate(720);
+		pilot.rotate(-45);
+		//Motor.B.rotate(720);
+		actualizarGRotacion(45);
 	}
 	public static void girarIzquierda() throws InterruptedException{
+		pilot.rotate(45);
 		//Motor.B.setSpeed(0.5F);
 		//Motor.A.setSpeed(1);
 		//Motor.B.rotate(10);
-		Motor.A.rotate(720);
+		//Motor.A.rotate(720);
 		actualizarGRotacion(-45);
 	}
 	public static void chutar() throws InterruptedException{
