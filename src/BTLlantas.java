@@ -87,7 +87,7 @@ public class BTLlantas {
 		   
 		}//Cierre del metodo
 	/**
-	 * Metodo para definir las velocidades para totrar de los motores y actualizar su posicion respectivamente
+	 * Metodo para definir las velocidades para trotar de los motores y actualizar su posicion respectivamente
 	 * @throws InterruptedException
 	 */
 	public static void trotar() throws InterruptedException{
@@ -144,7 +144,7 @@ public class BTLlantas {
 		actualizarGRotacion(45);
 	}//Cierre del metodo
 	/**
-	 * etodo para definir las velocidades de los motores para girar a la izquierda 
+	 * Metodo para definir las velocidades de los motores para girar a la izquierda 
 	 * @throws InterruptedException
 	 */
 	public static void girarIzquierda() throws InterruptedException{
